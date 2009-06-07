@@ -12,27 +12,27 @@ namespace System.Web.Mvc.IronRuby.Helpers
     {
         public string TextArea(string name)
         {
-            return _helper.TextArea(name);
+            return TextAreaExtensions.TextArea(_helper, name);
         }
 
         public string TextArea(string name, Hash htmlAttributes)
         {
-            return _helper.TextArea(name, htmlAttributes.ToDictionary());
+            return TextAreaExtensions.TextArea(_helper, name, htmlAttributes.ToDictionary());
         }
 
         public string TextArea(string name, string value)
         {
-            return _helper.TextArea(name, value);
+            return TextAreaExtensions.TextArea(_helper, name, value);
         }
 
         public string TextArea(string name, string value, Hash htmlAttributes)
         {
-            return _helper.TextArea(name, value, htmlAttributes.ToDictionary());
+            return TextAreaExtensions.TextArea(_helper, name, value, htmlAttributes.ToDictionary());
         }
 
         public string TextArea(string name, string value, int rows, int columns, Hash htmlAttributes)
         {
-            return _helper.TextArea(name, value, rows, columns, htmlAttributes.ToDictionary());
+            return TextAreaExtensions.TextArea(_helper, name, value, rows, columns, htmlAttributes.ToDictionary());
         }
     }
 }

@@ -26,6 +26,82 @@ namespace System.Web.Mvc.IronRuby.Extensions
                 action(o);
             }
         }
+		
+		public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if (predicate(source)) yield return source;
+            }
+        }
+		
+		public static bool Contains<T>(this IEnumerable<T> collection, T value)
+        {
+            foreach (var t in collection)
+            {
+                if ((t.IsNull() && value.IsNull()) || (t.IsNotNull() && t.Equals(value))) return true;
+            }
+            return false;
+        }
+		
+		internal static int Count(this IEnumerable collection)
+        {
+            var count = 0;
+            foreach (var o in collection)
+            {
+                count++;
+            }
+            return count;
+        }
+		
+		internal static IEnumerable<TTarget> Cast<TTarget>(this IEnumerable collection) where TTarget : class
+        {
+            var result = new List<TTarget>();
+            collection.ForEach(item =>
+                                   {
+                                       var casted = (typeof (TTarget) == typeof (string)) ? item.ToString() as TTarget : item as TTarget;
+                                       if (casted.IsNotNull()) result.Add(casted);
+                                   });
+            return result;
+        }
+		
+		public static bool All<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if (!predicate(source)) return false;
+            }
+            return true;
+        }
+ 
+        public static bool Any<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            foreach (var source in collection)
+            {
+                if (predicate(source)) return true;
+            }
+            return false;
+        }
+		
+		internal static TSource[] ToArray<TSource>(this IEnumerable<TSource> collection)
+        {
+            var result = new TSource[collection.Count()];
+            var idx = 0;
+ 
+            collection.ForEach(item => result[idx++] = item);
+ 
+            return result;
+        }
+		
+		internal static int Count<TSource>(this IEnumerable<TSource> collection, Predicate<TSource> predicate)
+        {
+            var count = 0;
+            foreach (var o in collection)
+            {
+                if (predicate(o)) count++;
+            }
+            return count;
+        }
 
         [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
         public static bool IsEmpty<T>(this IEnumerable<T> collection)

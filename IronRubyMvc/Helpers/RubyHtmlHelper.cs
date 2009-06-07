@@ -21,22 +21,22 @@ namespace System.Web.Mvc.IronRuby.Helpers
 
         public void RenderPartial(string partialViewName)
         {
-            _helper.RenderPartial(partialViewName);
+            RenderPartialExtensions.RenderPartial(_helper, partialViewName);
         }
 
         public void RenderPartial(string partialViewName, object model)
         {
-            _helper.RenderPartial(partialViewName, model);
+            RenderPartialExtensions.RenderPartial(_helper, partialViewName, model);
         }
 
         public void RenderPartial(string partialViewName, Hash viewData)
         {
-            _helper.RenderPartial(partialViewName, viewData.ToViewDataDictionary());
+            RenderPartialExtensions.RenderPartial(_helper, partialViewName, viewData.ToViewDataDictionary());
         }
 
         public void RenderPartial(string partialViewName, object model, Hash viewData)
         {
-            _helper.RenderPartial(partialViewName, model, viewData.ToViewDataDictionary());
+            RenderPartialExtensions.RenderPartial(_helper, partialViewName, model, viewData.ToViewDataDictionary());
         }
     }
 }

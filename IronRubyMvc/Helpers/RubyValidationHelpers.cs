@@ -12,37 +12,37 @@ namespace System.Web.Mvc.IronRuby.Helpers
     {
         public string ValidationMessage(string modelName)
         {
-            return _helper.ValidationMessage(modelName);
+            return ValidationExtensions.ValidationMessage(_helper, modelName);
         }
 
         public string ValidationMessage(string modelName, Hash htmlAttributes)
         {
-            return _helper.ValidationMessage(modelName, htmlAttributes.ToDictionary());
+            return ValidationExtensions.ValidationMessage(_helper, modelName, htmlAttributes.ToDictionary());
         }
 
         public string ValidationMessage(string modelName, string validationMessage)
         {
-            return _helper.ValidationMessage(modelName, validationMessage);
+            return ValidationExtensions.ValidationMessage(_helper, modelName, validationMessage);
         }
 
         public string ValidationMessage(string modelName, string validationMessage, Hash htmlAttributes)
         {
-            return _helper.ValidationMessage(modelName, validationMessage, htmlAttributes.ToDictionary());
+            return ValidationExtensions.ValidationMessage(_helper, modelName, validationMessage, htmlAttributes.ToDictionary());
         }
 
         public string ValidationSummary()
         {
-            return _helper.ValidationSummary();
+            return ValidationExtensions.ValidationSummary(_helper );
         }
 
         public string ValidationSummary(string message)
         {
-            return _helper.ValidationSummary(message);
+            return ValidationExtensions.ValidationSummary(_helper, message);
         }
 
         public string ValidationSummary(string message, Hash htmlAttributes)
         {
-            return _helper.ValidationSummary(message, htmlAttributes.ToDictionary());
+            return ValidationExtensions.ValidationSummary(_helper, message, htmlAttributes.ToDictionary());
         }
     }
 }

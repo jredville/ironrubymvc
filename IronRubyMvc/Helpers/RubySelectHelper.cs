@@ -12,47 +12,47 @@ namespace System.Web.Mvc.IronRuby.Helpers
     {
         public string DropDownList(string name, string optionLabel)
         {
-            return _helper.DropDownList(name, optionLabel);
+            return SelectExtensions.DropDownList(_helper, name, optionLabel);
         }
 
         public string DropDownList(string name, RubyArray selectList, string optionLabel)
         {
-            return _helper.DropDownList(name, selectList.ToSelectListItemList(), optionLabel);
+            return SelectExtensions.DropDownList(_helper, name, selectList.ToSelectListItemList(), optionLabel);
         }
 
         public string DropDownList(string name, RubyArray selectList, string optionLabel, Hash htmlAttributes)
         {
-            return _helper.DropDownList(name, selectList.ToSelectListItemList(), optionLabel, htmlAttributes.ToDictionary());
+            return SelectExtensions.DropDownList(_helper, name, selectList.ToSelectListItemList(), optionLabel, htmlAttributes.ToDictionary());
         }
 
         public string DropDownList(string name)
         {
-            return _helper.DropDownList(name);
+            return SelectExtensions.DropDownList(_helper, name);
         }
 
         public string DropDownList(string name, RubyArray selectList)
         {
-            return _helper.DropDownList(name, selectList.ToSelectListItemList());
+            return SelectExtensions.DropDownList(_helper, name, selectList.ToSelectListItemList());
         }
 
         public string DropDownList(string name, RubyArray selectList, Hash htmlAttributes)
         {
-            return _helper.DropDownList(name, selectList.ToSelectListItemList(), htmlAttributes.ToDictionary());
+            return SelectExtensions.DropDownList(_helper, name, selectList.ToSelectListItemList(), htmlAttributes.ToDictionary());
         }
 
         public string ListBox(string name)
         {
-            return _helper.ListBox(name);
+            return SelectExtensions.ListBox(_helper, name);
         }
 
         public string ListBox(string name, RubyArray selectList)
         {
-            return _helper.ListBox(name, selectList.ToSelectListItemList());
+            return SelectExtensions.ListBox(_helper, name, selectList.ToSelectListItemList());
         }
 
         public string ListBox(string name, RubyArray selectList, Hash htmlAttributes)
         {
-            return _helper.ListBox(name, selectList.ToSelectListItemList(), htmlAttributes.ToDictionary());
+            return SelectExtensions.ListBox(_helper, name, selectList.ToSelectListItemList(), htmlAttributes.ToDictionary());
         }
     }
 }

@@ -1,4 +1,3 @@
-extern alias clr3;
 #region Usings
 
 using System.Collections.Generic;

@@ -1,4 +1,3 @@
-﻿extern alias clr3;
 #region Usings
 
 using System.Collections.Generic;
@@ -108,14 +107,22 @@ namespace System.Web.Mvc.IronRuby.ViewEngine
             string controllerName = controllerContext.RouteData.GetRequiredString("controller");
             string viewPath = GetPath(controllerContext, ViewLocationFormats, "ViewLocationFormats", viewName, controllerName, _cacheKeyPrefix_View, useCache, out viewLocationsSearched);
             string masterPath = GetPath(controllerContext, MasterLocationFormats, "MasterLocationFormats", masterName, controllerName, _cacheKeyPrefix_Master, useCache, out masterLocationsSearched);
-
-            if (String.IsNullOrEmpty(viewPath) || (String.IsNullOrEmpty(masterPath) && !String.IsNullOrEmpty(masterName)))
+			
+			if (String.IsNullOrEmpty(viewPath) || (String.IsNullOrEmpty(masterPath) && !String.IsNullOrEmpty(masterName)))
             {
-                return new ViewEngineResult(clr3::System.Linq.Enumerable.Union(viewLocationsSearched, masterLocationsSearched));
+                return new ViewEngineResult(ConcatResults(viewLocationsSearched, masterLocationsSearched));
             }
 
             return new ViewEngineResult(CreateView(controllerContext, viewPath, masterPath), this);
         }
+		
+		private string[] ConcatResults(string[] viewLocations, string[] masterLocations){
+			string[] result = new string[viewLocations.Length + masterLocations.Length];
+			viewLocations.CopyTo(result, 0);
+			masterLocations.CopyTo(result, viewLocations.Length);				
+			
+			return result;
+		}
 
         private string GetPath(ControllerContext controllerContext, string[] locations, string locationsPropertyName, string name, string controllerName, string cacheKeyPrefix, bool useCache, out string[] searchedLocations)
         {
