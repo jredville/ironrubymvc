@@ -1,37 +1,29 @@
 #region Usings
 
-using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Web.Mvc;
 using System.Web.Mvc.IronRuby.Controllers;
 using System.Web.Mvc.IronRuby.Core;
-using System.Web.Mvc.IronRuby.Tests.Core;
 using System.Web.Routing;
 using IronRuby;
 using IronRuby.Runtime;
 using Microsoft.Scripting.Hosting;
-using Moq;
 using Moq.Mvc;
 using Rhino.Mocks;
 using Xunit;
 
 #endregion
 
-namespace System.Web.Mvc.IronRuby.Tests.Controllers
-{
+namespace System.Web.Mvc.IronRuby.Tests.Controllers {
     public abstract class with_ironruby_initialized<SystemUnderTest> : InstanceContextSpecification<SystemUnderTest>
-        where SystemUnderTest : class
-    {
+        where SystemUnderTest : class {
         protected static ScriptRuntime _scriptRuntime;
         protected RubyContext _context;
         protected ScriptEngine _engine;
 
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
 
-            if (_scriptRuntime == null)
-            {
+            if (_scriptRuntime == null) {
                 var rubySetup = Ruby.CreateRubySetup();
                 rubySetup.Options["InterpretedMode"] = true;
 
@@ -42,18 +34,16 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
                 _scriptRuntime = Ruby.CreateRuntime(runtimeSetup);
             }
             _engine = _scriptRuntime.GetRubyEngine();
-            _context = Ruby.GetExecutionContext(_engine);
+            _context = Microsoft.Scripting.Hosting.Providers.HostingHelpers.GetLanguageContext(_engine) as RubyContext;
         }
     }
 
     public abstract class with_ironruby_and_an_engine_initialized<SystemUnderTest> :
-        with_ironruby_initialized<SystemUnderTest> where SystemUnderTest : class
-    {
+        with_ironruby_initialized<SystemUnderTest> where SystemUnderTest : class {
         protected IPathProvider _pathProvider;
         protected IRubyEngine _rubyEngine;
 
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
 
 
@@ -64,15 +54,13 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
         }
     }
 
-    [Concern(typeof (RubyActionDescriptor))]
-    public class when_descriptor_executes : with_ironruby_and_an_engine_initialized<RubyActionDescriptor>
-    {
+    [Concern(typeof(RubyActionDescriptor))]
+    public class when_descriptor_executes : with_ironruby_and_an_engine_initialized<RubyActionDescriptor> {
         private ControllerContext _controllerContext;
         private RubyControllerDescriptor _controllerDescriptor;
         private string _result;
 
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
             var script = new StringBuilder();
             script.AppendLine("class SamuraisController < Controller");
@@ -94,30 +82,25 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
             _controllerDescriptor = new RubyControllerDescriptor(rubyClass, _rubyEngine);
         }
 
-        protected override RubyActionDescriptor CreateSut()
-        {
+        protected override RubyActionDescriptor CreateSut() {
             return new RubyActionDescriptor("my_action", _controllerDescriptor, _rubyEngine);
         }
 
-        protected override void Because()
-        {
+        protected override void Because() {
             _result = Sut.Execute(_controllerContext, new Dictionary<string, object>()).ToString();
         }
 
         [Observation]
-        public void should_execute_the_action()
-        {
+        public void should_execute_the_action() {
             _result.ShouldBeEqualTo("Can't see ninjas");
         }
     }
 
-    [Concern(typeof (RubyActionDescriptor))]
-    public class when_descriptor_gets_initialized : with_ironruby_and_an_engine_initialized<RubyActionDescriptor>
-    {
+    [Concern(typeof(RubyActionDescriptor))]
+    public class when_descriptor_gets_initialized : with_ironruby_and_an_engine_initialized<RubyActionDescriptor> {
         private RubyControllerDescriptor _controllerDescriptor;
 
-        protected override void EstablishContext()
-        {
+        protected override void EstablishContext() {
             base.EstablishContext();
             var script = new StringBuilder();
             script.AppendLine("class SamuraisController < Controller");
@@ -132,48 +115,40 @@ namespace System.Web.Mvc.IronRuby.Tests.Controllers
                 MockRepository.GenerateStub<RubyControllerDescriptor>(_rubyEngine.GetRubyClass("SamuraisController"), _rubyEngine);
         }
 
-        protected override RubyActionDescriptor CreateSut()
-        {
+        protected override RubyActionDescriptor CreateSut() {
             return new RubyActionDescriptor("my_action", _controllerDescriptor, _rubyEngine);
         }
 
-        protected override void Because()
-        {
+        protected override void Because() {
         }
 
         [Observation]
-        public void should_have_an_action_name()
-        {
+        public void should_have_an_action_name() {
             Sut.ActionName.ShouldNotBeEmpty();
         }
 
         [Observation]
-        public void should_have_the_correct_action_name()
-        {
+        public void should_have_the_correct_action_name() {
             Sut.ActionName.ShouldBeEqualTo("my_action");
         }
 
         [Observation]
-        public void should_have_a_controller_descriptor()
-        {
+        public void should_have_a_controller_descriptor() {
             Sut.ControllerDescriptor.ShouldNotBeNull();
         }
 
         [Observation]
-        public void should_have_a_ruby_controller_descriptor()
-        {
+        public void should_have_a_ruby_controller_descriptor() {
             Sut.ControllerDescriptor.ShouldBeAnInstanceOf<RubyControllerDescriptor>();
         }
 
         [Observation]
-        public void should_have_the_correct_controller_descriptor()
-        {
+        public void should_have_the_correct_controller_descriptor() {
             Assert.Same(Sut.ControllerDescriptor, _controllerDescriptor);
         }
 
         [Observation]
-        public void should_return_an_empty_array_for_parameters()
-        {
+        public void should_return_an_empty_array_for_parameters() {
             Sut.GetParameters().ShouldBeEmpty();
         }
     }

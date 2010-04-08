@@ -7,85 +7,67 @@ using IronRuby.Builtins;
 
 #endregion
 
-namespace System.Web.Mvc.IronRuby.Extensions
-{
-    public static class IEnumerableExtensions
-    {
-        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action)
-        {
-            foreach (var t in collection)
-            {
+namespace System.Web.Mvc.IronRuby.Extensions {
+    public static class IEnumerableExtensions {
+        public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action) {
+            foreach (var t in collection) {
                 action(t);
             }
         }
 
-        public static void ForEach(this IEnumerable collection, Action<object> action)
-        {
-            foreach (var o in collection)
-            {
+        public static void ForEach(this IEnumerable collection, Action<object> action) {
+            foreach (var o in collection) {
                 action(o);
             }
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
-        public static bool IsEmpty<T>(this IEnumerable<T> collection)
-        {
+        public static bool IsEmpty<T>(this IEnumerable<T> collection) {
             // not guarding for null foreach does that for me
-            foreach (var o in collection)
-            {
+            foreach (var o in collection) {
                 return false;
             }
             return true;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "o")]
-        public static bool IsEmpty(this IEnumerable collection)
-        {
+        public static bool IsEmpty(this IEnumerable collection) {
             // not guarding for null, foreach does that for me
-            foreach (var o in collection)
-            {
+            foreach (var o in collection) {
                 return false;
             }
             return true;
         }
 
-        internal static bool DoesNotContain<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate)
-        {
-            foreach (var o in collection)
-            {
+        internal static bool DoesNotContain<TSource>(this IEnumerable<TSource> collection, Func<TSource, bool> predicate) {
+            foreach (var o in collection) {
                 if (predicate(o)) return false;
             }
             return true;
         }
 
-        internal static IEnumerable<TTarget> Map<TSource, TTarget>(this IEnumerable<TSource> collection, Func<TSource, TTarget> iterator)
-        {
-            foreach (var source in collection)
-            {
+        internal static IEnumerable<TTarget> Map<TSource, TTarget>(this IEnumerable<TSource> collection, Func<TSource, TTarget> iterator) {
+            foreach (var source in collection) {
                 yield return iterator(source);
             }
         }
 
-        internal static IEnumerable Map(this IEnumerable collection, Func<object, object> iterator)
-        {
-            foreach (var source in collection)
-            {
+        internal static IEnumerable Map(this IEnumerable collection, Func<object, object> iterator) {
+            foreach (var source in collection) {
                 yield return iterator(source);
             }
         }
 
-        internal static IEnumerable<SelectListItem> ToSelectListItemList(this IEnumerable collection)
-        {
+        internal static IEnumerable<SelectListItem> ToSelectListItemList(this IEnumerable collection) {
             var result = new List<SelectListItem>();
 
             collection.ForEach(item =>
                                    {
-                                       var hash = (Hash) item;
+                                       var hash = (Hash)item;
                                        var li = new SelectListItem();
                                        hash.ForEach((key, value) =>
                                                         {
-                                                            switch(key.ToString().ToUpperInvariant())
-                                                            {
+                                                            switch (key.ToString().ToUpperInvariant()) {
                                                                 case "TEXT":
                                                                     li.Text = value.ToString();
                                                                     break;
@@ -93,7 +75,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
                                                                     li.Value = value.ToString();
                                                                     break;
                                                                 case "SELECTED":
-                                                                    li.Selected = (bool) value;
+                                                                    li.Selected = (bool)value;
                                                                     break;
                                                             }
                                                         });
@@ -102,8 +84,7 @@ namespace System.Web.Mvc.IronRuby.Extensions
             return result;
         }
 
-        internal static IEnumerable<TTarget> CastTo<TTarget>(this IEnumerable collection) where TTarget : class
-        {
+        internal static IEnumerable<TTarget> CastTo<TTarget>(this IEnumerable collection) where TTarget : class {
             var result = new List<TTarget>();
             collection.ForEach(item =>
             {

@@ -13,3 +13,5 @@ dependencies/IronRuby.Tests.exe
 dependencies/IronRuby.Tests.pdb
 .idea
 *.sln.cache
+*.ruleset
+IronRubyMvcWeb/Scripts/*
